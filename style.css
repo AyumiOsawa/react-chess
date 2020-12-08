@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.base {
+  line-height: 100vh;
+  min-width: 100vw;
+  min-width: 100vh;
+  background-color: #e8cd9b;
+  position: relative;
+}
+
+.cell {
+  position: absolute;
+}
+
+.black {
+  background-color: black;
+}
+
+.white {
+  background-color: white;
+}
