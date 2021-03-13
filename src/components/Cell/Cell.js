@@ -1,11 +1,12 @@
 import './Cell.css';
 
-export default function Cell() {
+export default function Cell({cellNum, rowNum}) {
   return (
     <div
-      className="cell"
+      id={`cell-${rowNum}-${cellNum}`}
+      className='cell'
     >
-
+     "cell!"
     </div>
   )
 }

@@ -5,41 +5,43 @@ import Board from '../Board/Board';
 import constants from '../../shared/constants';
 
 export default function App() {
-  const boardX = constants.BOARD.size[0];
-  const boardY = constants.BOARD.size[1];
-  const initialBoardState = Array.from(Array(boardY), row => {
-    row = Array(boardX)
-  });
-  console.log('initialBoardState',initialBoardState);
-  const [ board, setBoard ] = useState(new Array())
+  const columnNum = constants.BOARD.size[0];
+  const rowNum = constants.BOARD.size[1];
+  const initialCellState = {
+                             piece: null,
+                             selected: false
+                           };
+  const initialRowState = Array(columnNum).fill(initialCellState);
+  const initialBoardState = Array(rowNum).fill(initialRowState);
+  const [ board, setBoard ] = useState(initialBoardState);
   // const locations = [];
-  // for (let index = 0; index < boardX; index++) {
-  //   locations.push(Array(boardY));
+  // for (let index = 0; index < columnNum; index++) {
+  //   locations.push(Array(rowNum));
   // };
-  const viewportWidth  = Math.max(document.documentElement.clientWidth || 0,
-                                  window.innerWidth || 0);
-  const viewportHeight = Math.max(document.documentElement.clientHeight || 0,
-                                  window.innerHeight || 0);
-  const boardWidth  = viewportWidth  * 0.8;
-  const boardHeight = viewportHeight * 0.8;
+  // const viewportWidth  = Math.max(document.documentElement.clientWidth || 0,
+  //                                 window.innerWidth || 0);
+  // const viewportHeight = Math.max(document.documentElement.clientHeight || 0,
+  //                                 window.innerHeight || 0);
+  // const columnNum  = viewportWidth  * 0.8;
+  // const rowNum = viewportHeight * 0.8;
 
-  const cellSize = Math.min(boardWidth / boardX, boardHeight / boardY);
-  const boardLeft = viewportWidth  / 2 - cellSize * (boardX / 2);
-  const boardTop  = viewportHeight / 2 - cellSize * (boardY / 2);
+  // const cellSize = Math.min(columnNum / columnNum, rowNum / rowNum);
+  // const boardLeft = viewportWidth  / 2 - cellSize * (columnNum / 2);
+  // const boardTop  = viewportHeight / 2 - cellSize * (rowNum / 2);
 
   // TODO: dynamically render the components
   // const generateBoardAndPieces = (
-  //                                   boardX,
-  //                                   boardY,
+  //                                   columnNum,
+  //                                   rowNum,
   //                                   boardLeft,
   //                                   boardTop
   //                                ) => {
   //   const board = [];
-  //   for (let rowIndex = 0; rowIndex < boardX; rowIndex++) {
+  //   for (let rowIndex = 0; rowIndex < columnNum; rowIndex++) {
   //     const row = document.createElement('DIV');
   //     row.classList.add(`row${rowIndex}`);
   //     row.id = `row${rowIndex}`;
-  //     for (let columnIndex = 0; columnIndex < boardY; columnIndex++) {
+  //     for (let columnIndex = 0; columnIndex < rowNum; columnIndex++) {
   //       const cell = document.createElement('DIV');
   //       cell.classList.add("cell");
   //       cell.id           = `cell${rowIndex}-${columnIndex}`;
@@ -91,8 +93,7 @@ export default function App() {
           className="board"
         >
           <Board
-            boardX='boardX'
-            boardY='boardY'
+            board={board}
           />
         </div>
     </div>

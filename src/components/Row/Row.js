@@ -1,13 +1,23 @@
 import './Row.css';
 import Cell from '../Cell/Cell';
 
-export default function Row({boardX}) {
+export default function Row({boardX, rowNum}) {
+  console.log(Array(boardX));
   return (
     <div
-      className="board"
+      id={`row-${rowNum}`}
+      className='row'
     >
     {
-      <Cell />
+      Array(boardX).fill(null).map((cell, index) => {
+        return (
+          <Cell
+            key={index}
+            cellNum={index}
+            rowNum={rowNum}
+          />
+        );
+      })
     }
     </div>
   );
