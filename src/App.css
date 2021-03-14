@@ -1,11 +1,6 @@
 .App {
   text-align: center;
-}
-
-.base {
-  line-height: 100vh;
   min-width: 100vw;
-  min-width: 100vh;
+  min-height: 100vh;
   background-color: #e8cd9b;
-  position: relative;
 }

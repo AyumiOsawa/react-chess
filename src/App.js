@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import './App.css';
-import Board from '../Board/Board';
-import constants from '../../shared/constants';
+import Board from './features/Board/Board';
+import constants from './shared/constants';
 
 export default function App() {
   const columnNum = constants.BOARD.size[0];
@@ -87,16 +87,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <div className="base">
-        <div
-          id="board"
-          className="board"
-        >
-          <Board
-            board={board}
-          />
-        </div>
-    </div>
+      <Board />
     </div>
   );
 }
