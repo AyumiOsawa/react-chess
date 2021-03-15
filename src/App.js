@@ -1,19 +1,20 @@
-import { useState } from 'react';
-
+// import { useState } from 'react';
 import './App.css';
 import Board from './features/Board/Board';
-import constants from './shared/constants';
+// import constants from './shared/constants';
 
 export default function App() {
-  const columnNum = constants.BOARD.size[0];
-  const rowNum = constants.BOARD.size[1];
-  const initialCellState = {
-                             piece: null,
-                             selected: false
-                           };
-  const initialRowState = Array(columnNum).fill(initialCellState);
-  const initialBoardState = Array(rowNum).fill(initialRowState);
-  const [ board, setBoard ] = useState(initialBoardState);
+  // const columnNum = constants.BOARD.size[0];
+  // const rowNum = constants.BOARD.size[1];
+  // const initialCellState = {
+  //                            piece: null,
+  //                            selected: false
+  //                          };
+  // const initialRowState = Array(columnNum).fill(initialCellState);
+  // const initialBoardState = Array(rowNum).fill(initialRowState);
+
+
+  // const [ board, setBoard ] = useState(initialBoardState);
   // const locations = [];
   // for (let index = 0; index < columnNum; index++) {
   //   locations.push(Array(rowNum));
