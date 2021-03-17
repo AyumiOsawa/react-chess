@@ -15,7 +15,8 @@ export default function Row({ rowNum, cellSize, boardLeft, cellStyles }) {
         return (
           <Cell
             key={index}
-            cellNum={`${rowNum}-${index}`}
+            colNum={index}
+            rowNum={rowNum}
             bgColor={
               rowNum % 2 === index % 2 ?
               'white' :
