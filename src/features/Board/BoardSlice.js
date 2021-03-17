@@ -47,13 +47,14 @@ const createInitialBoard = (initialSelectedCell) => {
                              selected : false
                            };
   const initialRowState   = Array.from({length: columnNum}, () => ({...initialCellState}));
-  const initialBoardState = Array.from({length: rowNum   }, () => ([...initialRowState]));
+  const initialBoardState = Array.from({length: rowNum   }, () => {
+    return initialRowState.map(cell => Object.assign({}, cell));
+  });
   const pieceLocations = setUpBoard(rowNum, columnNum);
-  console.log('pieceLocations',pieceLocations);
-  // pieceLocations.forEach(cell => {
-  //   initialBoardState[cell.row][cell.column].piece = cell.piece;
-  // })
-  initialBoardState[0][0].piece = 'boo'
+  pieceLocations.forEach(cell => {
+    initialBoardState[cell.row][cell.column].piece = cell.piece;
+  })
+  
   return initialBoardState;
 };
 console.log('createInitialBoard',createInitialBoard());
