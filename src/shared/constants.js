@@ -1,27 +1,33 @@
 export default Object.freeze({
-  BOARD: {
+  BOARD : {
     size: [8, 8]
   },
-  PIECE: {
+  PIECES: {
     number: 8,
     info: [
       {
-        name: 'king'
+        name: 'king',
+        img : './img/king.png'
       },
       {
-        name: 'queen'
+        name: 'queen',
+        img : './img/queen.png'
       },
       {
-        name: 'pawn'
+        name: 'pawn',
+        img : './img/pawn.png'
       },
       {
-        name: 'knight'
+        name: 'knight',
+        img : './img/knight.png'
       },
       {
-        name: 'bishop'
+        name: 'bishop',
+        img : './img/bishop.png'
       },
       {
-        name: 'rook'
+        name: 'rook',
+        img : './img/rook.png'
       },
     ]
   }

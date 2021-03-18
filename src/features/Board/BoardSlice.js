@@ -54,14 +54,11 @@ const createInitialBoard = (initialSelectedCell) => {
   pieceLocations.forEach(cell => {
     initialBoardState[cell.row][cell.column].piece = cell.piece;
   })
-  
+
   return initialBoardState;
 };
-console.log('createInitialBoard',createInitialBoard());
 
-const initialState = {
-  board: createInitialBoard()
-};
+const initialState = createInitialBoard();
 
 // TODO: think about where to save the info about the selected cell and piece
 
