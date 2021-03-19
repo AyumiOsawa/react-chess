@@ -54,7 +54,6 @@ const createInitialBoard = (initialSelectedCell) => {
   pieceLocations.forEach(cell => {
     initialBoardState[cell.row][cell.column].piece = cell.piece;
   })
-
   return initialBoardState;
 };
 
@@ -66,17 +65,18 @@ const BoardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    select: (state, action) => {
-      const [column, row] = action.payload;
-      state[row][column].selected = true;
+    select: function(state, action) {
+      // TODO: unaable to select multiple cells
+      const {colNum, rowNum} = action.payload;
+      state[rowNum][colNum].selected = true;
     },
-    move: (state, action) => {
-      const [column, row] = action.payload;
+    move: function(state, action) {
+      const {column, row} = action.payload;
       state[row][column].piece = null;
     },
-    unselect: (state, action) => {
-      const [column, row] = action.payload;
-      state[row][column].selected = false;
+    unselect: function(state, action) {
+      const {colNum, rowNum} = action.payload;
+      state[rowNum][colNum].selected = false;
     }
   }
 });

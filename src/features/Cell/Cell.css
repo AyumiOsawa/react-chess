@@ -17,31 +17,6 @@
   background-size: contain;
 }
 
-/* .king {
-  background-image: url(./img/king.png);
-}
-
-.queen {
-  background-image: url(./img/queen.png);
-}
-
-.pawn {
-  background-image: url(./img/pawn.png);
-}
-
-.knight {
-  background-image: url(./img/knight.png);
-}
-
-.bishop {
-  background-image: url(./img/bishop.png);
-}
-
-.rook {
-  background-image: url(./img/rook.png);
-} */
-
 .selected {
-  border: 2px solid red;
-  background-color: rgba(214, 14, 0, 50);
+  background-color: rgba(144, 252, 3, 0.5);
 }
