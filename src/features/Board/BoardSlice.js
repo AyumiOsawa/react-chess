@@ -2,11 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import constants from '../../shared/constants';
 
-// const initialSelectedCell = {
-//                               row   : null,
-//                               column: null,
-//                               piece : null
-//                             };
 const setUpBoard = (columnNum, rowNum) => {
   const SetCell = function(row, column, piece) {
     this.collection = {
@@ -43,8 +38,7 @@ const createInitialBoard = (initialSelectedCell) => {
   const columnNum = constants.BOARD.size[0];
   const rowNum    = constants.BOARD.size[1];
   const initialCellState = {
-                             piece    : null,
-                             selected : false
+                             piece    : null
                            };
   const initialRowState   = Array.from({length: columnNum}, () => ({...initialCellState}));
   const initialBoardState = Array.from({length: rowNum   }, () => {
@@ -57,35 +51,19 @@ const createInitialBoard = (initialSelectedCell) => {
   return initialBoardState;
 };
 
-const initialState = createInitialBoard();
-
-// TODO: think about where to save the info about the selected cell and piece
-
+const initialStateBoard = createInitialBoard();
 const BoardSlice = createSlice({
   name: 'board',
-  initialState,
+  initialState: initialStateBoard,
   reducers: {
-    select: function(state, action) {
-      // TODO: unaable to select multiple cells
-      const {colNum, rowNum} = action.payload;
-      state[rowNum][colNum].selected = true;
-    },
     move: function(state, action) {
       const {column, row} = action.payload;
       state[row][column].piece = null;
-    },
-    unselect: function(state, action) {
-      const {colNum, rowNum} = action.payload;
-      state[rowNum][colNum].selected = false;
     }
   }
 });
 
-export const {
-  select,
-  move,
-  unselect
-} = BoardSlice.actions;
+export const move = BoardSlice.actions;
 
 export const selectBoard = state => state.board;
 

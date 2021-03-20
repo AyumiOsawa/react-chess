@@ -1,12 +1,9 @@
 import './Cell.css';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  selectBoard,
-  select,
-  unselect,
-  move
-} from '../Board/BoardSlice';
+import { selectBoard, move } from '../Board/BoardSlice';
+import { selectSelected, selectCell } from '../Cell/CellSlice';
+
 import constants from '../../shared/constants';
 
 export default function Cell(props) {
@@ -19,6 +16,7 @@ export default function Cell(props) {
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
 
+  // Set the piece, if there is one
   const board = useSelector(selectBoard);
   const piece = board[rowNum][colNum].piece;
   const pieceInfoCollection = constants.PIECES.info;
@@ -28,20 +26,27 @@ export default function Cell(props) {
     cellStyles.backgroundSize = 'contain';
   }
 
-  const isSelected = board[rowNum][colNum].selected;
-  const cellClassNames = isSelected ?
+  // set the background color, if it is selected
+  const selectedCell = useSelector(selectSelected);
+  const isSelected = (colNum, rowNum) => {
+    if (selectedCell.column === colNum && selectedCell.row === rowNum) {
+      return selectedCell.isSelected;
+    }
+    return false;
+  }
+  const cellClassNames = isSelected(colNum, rowNum) ?
                          `cell ${bgColor} selected` :
                          `cell ${bgColor}`
+  //  TODO: debug the styling issue
+  console.log('cellClassNames',cellClassNames);
   return (
     <div
       id={`cell-${colNum}-${rowNum}`}
       className={cellClassNames}
       style={cellStyles}
-      onClick={
-        isSelected ?
-        () => dispatch(unselect({colNum, rowNum})) :
-        () => dispatch(select({colNum, rowNum}))
-      }
+      onClick={() => {
+        return dispatch(selectCell({colNum, rowNum}));
+      }}
     >
     </div>
   )
