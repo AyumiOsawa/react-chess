@@ -1,7 +1,7 @@
 import './Cell.css';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectBoard, move } from '../Board/BoardSlice';
+import { selectBoard, move, colorPath } from '../Board/BoardSlice';
 import { selectSelected, selectCell } from '../Cell/CellSlice';
 
 import constants from '../../shared/constants';
@@ -15,7 +15,6 @@ export default function Cell(props) {
         } = props;
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
-
   // Set the piece, if there is one
   const board = useSelector(selectBoard);
   const piece = board[rowNum][colNum].piece;
@@ -25,27 +24,37 @@ export default function Cell(props) {
     cellStyles.backgroundImage = `url(${pieceInfo[0].img})`;
     cellStyles.backgroundSize = 'contain';
   }
-
   // set the background color, if it is selected
   const selectedCell = useSelector(selectSelected);
-  const isSelected = (colNum, rowNum) => {
+  const checkIsSelected = (colNum, rowNum) => {
     if (selectedCell.column === colNum && selectedCell.row === rowNum) {
       return selectedCell.isSelected;
     }
     return false;
+  };
+  const checkIsOnPath = (colNum, rowNum) => {
+    return board[rowNum][colNum].isOnPath;
+  };
+  const getClassNames = (colNum, rowNum) => {
+    //  if the cell it selected, it should be colored
+    let cellClassNames = checkIsSelected(colNum, rowNum) ?
+                           `cell ${bgColor} selected` :
+                           `cell ${bgColor}`;
+    //  if the cell is on the path, it should be colored
+     if(checkIsOnPath(colNum, rowNum)) {
+      cellClassNames = cellClassNames + ' path';
+     }
+    return cellClassNames;
   }
-  const cellClassNames = isSelected(colNum, rowNum) ?
-                         `cell ${bgColor} selected` :
-                         `cell ${bgColor}`
-  //  TODO: debug the styling issue
-  console.log('cellClassNames',cellClassNames);
+
   return (
     <div
       id={`cell-${colNum}-${rowNum}`}
-      className={cellClassNames}
+      className={getClassNames(colNum, rowNum)}
       style={cellStyles}
       onClick={() => {
-        return dispatch(selectCell({colNum, rowNum}));
+        dispatch(selectCell({colNum, rowNum}));
+        dispatch(colorPath({colNum, rowNum}));
       }}
     >
     </div>
