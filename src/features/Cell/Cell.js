@@ -1,8 +1,15 @@
 import './Cell.css';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useSelector,
+  useDispatch
+} from 'react-redux';
 
-import { selectBoard, move, colorPath, selectCell } from '../Board/BoardSlice';
-
+import {
+  selectBoard,
+  move,
+  selectCell,
+  colorPath
+} from '../Board/BoardSlice';
 import constants from '../../shared/constants';
 
 export default function Cell(props) {
@@ -14,7 +21,8 @@ export default function Cell(props) {
         } = props;
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
-  // Set the piece, if there is one
+
+  // Set a piece om a cell if needed
   const board = useSelector(selectBoard);
   const piece = board.cells[rowNum][colNum].piece;
   const pieceInfoCollection = constants.PIECES.info;
@@ -23,9 +31,10 @@ export default function Cell(props) {
     cellStyles.backgroundImage = `url(${pieceInfo[0].img})`;
     cellStyles.backgroundSize = 'contain';
   }
-  // set the background color, if it is selected
+  // set the background color if it is selected
   const checkIsSelected = (colNum, rowNum) => {
-    if (board.selected.column === colNum && board.selected.row === rowNum) {
+    if (board.selected.column === colNum &&
+        board.selected.row    === rowNum) {
       return board.selected.isSelected;
     }
     return false;

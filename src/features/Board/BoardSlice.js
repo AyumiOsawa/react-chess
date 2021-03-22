@@ -64,7 +64,7 @@ const calculatePath = (piece, colNum, rowNum) => {
 
       break;
     case pieces[2].name /* === pawn */:
-      // one cell or two cells front
+      // one cell or two cells to forward
       paths.push({
         row: rowNum - 1,
         col: colNum
@@ -99,11 +99,7 @@ const initialState = {
   cells    : initialStateBoard,
   selected : initialStateSelected
 };
-const initialStateSelected = {
-                                isSelected: false,
-                                row: null,
-                                column: null
-                              };
+
 const BoardSlice = createSlice({
   name: 'board',
   initialState,
@@ -113,17 +109,21 @@ const BoardSlice = createSlice({
       state.cells[rowNum][colNum].piece = null;
     },
     colorPath: (state, action) => {
-      // check if the piece is on the current cells
       const {colNum, rowNum} = action.payload;
       const piece = state.cells[rowNum][colNum].piece;
       if (piece === null) {
         return state;
       }
-      // depending on the piece, calculate which cell to color
       const paths = calculatePath(piece, colNum, rowNum);
-      // state update
+      // reset the isOnPath state
+      state.cells.forEach(row => {
+        row.forEach(cell => {
+          cell.isOnPath = false
+        })
+      })
+      // apply the styling to the cells on the path of the currently selected piece
       paths.forEach(cell => {
-        state.cells[cell.row][cell.col].isOnPath = !state.cells[cell.row][cell.col].isOnPath;
+        state.cells[cell.row][cell.col].isOnPath = true;
       })
     },
     selectCell: (state, action) => {
@@ -144,8 +144,8 @@ const BoardSlice = createSlice({
 
 export const {
   move,
-  colorPath,
   selectCell,
+  colorPath
 } = BoardSlice.actions;
 
 export const selectBoard = state => state.board;
