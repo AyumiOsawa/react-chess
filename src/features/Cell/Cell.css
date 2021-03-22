@@ -18,9 +18,10 @@
 }
 
 .selected {
-  background-color: rgba(144, 252, 3, 0.5);
+  background-color: rgba(144, 252, 3, 0.8);
 }
 
 .path {
-  background-color: rgba(54, 127, 255, 0.3);
+  /* border: px solid rgba(144, 252, 3, 0.5); */
+  background-color: rgba(144, 252, 3, 0.4);
 }

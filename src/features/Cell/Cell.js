@@ -1,8 +1,7 @@
 import './Cell.css';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectBoard, move, colorPath } from '../Board/BoardSlice';
-import { selectSelected, selectCell } from '../Cell/CellSlice';
+import { selectBoard, move, colorPath, selectCell } from '../Board/BoardSlice';
 
 import constants from '../../shared/constants';
 
@@ -17,7 +16,7 @@ export default function Cell(props) {
   const dispatch = useDispatch();
   // Set the piece, if there is one
   const board = useSelector(selectBoard);
-  const piece = board[rowNum][colNum].piece;
+  const piece = board.cells[rowNum][colNum].piece;
   const pieceInfoCollection = constants.PIECES.info;
   if (piece !== null) {
     const pieceInfo = pieceInfoCollection.filter(info => info.name === piece);
@@ -25,17 +24,17 @@ export default function Cell(props) {
     cellStyles.backgroundSize = 'contain';
   }
   // set the background color, if it is selected
-  const selectedCell = useSelector(selectSelected);
   const checkIsSelected = (colNum, rowNum) => {
-    if (selectedCell.column === colNum && selectedCell.row === rowNum) {
-      return selectedCell.isSelected;
+    if (board.selected.column === colNum && board.selected.row === rowNum) {
+      return board.selected.isSelected;
     }
     return false;
   };
   const checkIsOnPath = (colNum, rowNum) => {
-    return board[rowNum][colNum].isOnPath;
+    return board.cells[rowNum][colNum].isOnPath;
   };
   const getClassNames = (colNum, rowNum) => {
+    // TODO:
     //  if the cell it selected, it should be colored
     let cellClassNames = checkIsSelected(colNum, rowNum) ?
                            `cell ${bgColor} selected` :

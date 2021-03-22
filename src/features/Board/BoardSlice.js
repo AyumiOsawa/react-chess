@@ -58,7 +58,7 @@ const calculatePath = (piece, colNum, rowNum) => {
   let paths = [];
   switch (piece) {
     case pieces[0].name /* === king */:
-    //  TODO: add patterns 
+    //  TODO: add patterns
       break;
     case pieces[1].name /* ===  queen */:
 
@@ -89,19 +89,33 @@ const calculatePath = (piece, colNum, rowNum) => {
   return paths;
 }
 
-const initialStateBoard = createInitialBoard();
+const initialStateBoard    = createInitialBoard();
+const initialStateSelected = {
+                                isSelected: false,
+                                row: null,
+                                column: null
+                              };
+const initialState = {
+  cells    : initialStateBoard,
+  selected : initialStateSelected
+};
+const initialStateSelected = {
+                                isSelected: false,
+                                row: null,
+                                column: null
+                              };
 const BoardSlice = createSlice({
   name: 'board',
-  initialState: initialStateBoard,
+  initialState,
   reducers: {
     move: (state, action) => {
       const {colNum, rowNum} = action.payload;
-      state[rowNum][colNum].piece = null;
+      state.cells[rowNum][colNum].piece = null;
     },
     colorPath: (state, action) => {
       // check if the piece is on the current cells
       const {colNum, rowNum} = action.payload;
-      const piece = state[rowNum][colNum].piece;
+      const piece = state.cells[rowNum][colNum].piece;
       if (piece === null) {
         return state;
       }
@@ -109,15 +123,29 @@ const BoardSlice = createSlice({
       const paths = calculatePath(piece, colNum, rowNum);
       // state update
       paths.forEach(cell => {
-        state[cell.row][cell.col].isOnPath = !state[cell.row][cell.col].isOnPath;
+        state.cells[cell.row][cell.col].isOnPath = !state.cells[cell.row][cell.col].isOnPath;
       })
+    },
+    selectCell: (state, action) => {
+      const {colNum, rowNum} = action.payload;
+      // re-selection of the same cell cancells the seceltion
+      if (state.selected.column === colNum && state.selected.row === rowNum) {
+        state.selected.isSelected  = initialStateSelected.isSelected;
+        state.selected.row         = initialStateSelected.row;
+        state.selected.column      = initialStateSelected.column;
+      } else {
+        state.selected.isSelected  = true;
+        state.selected.row         = rowNum;
+        state.selected.column      = colNum;
+      }
     }
   }
 });
 
 export const {
   move,
-  colorPath
+  colorPath,
+  selectCell,
 } = BoardSlice.actions;
 
 export const selectBoard = state => state.board;
