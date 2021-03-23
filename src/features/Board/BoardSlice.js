@@ -111,16 +111,17 @@ const BoardSlice = createSlice({
     colorPath: (state, action) => {
       const {colNum, rowNum} = action.payload;
       const piece = state.cells[rowNum][colNum].piece;
-      if (piece === null) {
-        return state;
-      }
-      const paths = calculatePath(piece, colNum, rowNum);
       // reset the isOnPath state
       state.cells.forEach(row => {
         row.forEach(cell => {
+          cell.isOnPath ? console.log('cell', cell) : console.log(cell.isOnPath);
           cell.isOnPath = false
         })
       })
+      if (piece === null || !state.selected.isSelected ) {
+        return state;
+      }
+      const paths = calculatePath(piece, colNum, rowNum);
       // apply the styling to the cells on the path of the currently selected piece
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = true;
