@@ -54,6 +54,17 @@ const createInitialBoard = (initialSelectedCell) => {
   return initialBoardState;
 };
 
+const boardSize = constants.BOARD.size;
+const colSize = boardSize[0];
+const rowSize = boardSize[1];
+const validateLocation = (num, isRow) => {
+  if (isRow) {  // validate the row location
+    return num >= 0 && num < rowSize;
+  }
+  // validate the column location
+  return num >= 0 && num < colSize;
+}
+
 const calculatePath = (piece, colNum, rowNum) => {
   let paths = [];
   switch (piece) {
@@ -64,7 +75,6 @@ const calculatePath = (piece, colNum, rowNum) => {
 
       break;
     case pieces[2].name /* === pawn */:
-      // one cell or two cells to forward
       paths.push({
         row: rowNum - 1,
         col: colNum
@@ -75,13 +85,76 @@ const calculatePath = (piece, colNum, rowNum) => {
       });
       break;
     case pieces[3].name /* === knight */:
-
+      const moves = [
+        [ 1,  2],
+        [ 1, -2],
+        [-1,  2],
+        [-1, -2]
+      ];
+      // row -> move[0], col -> move[1]
+      moves.forEach(move => {
+        if ( validateLocation((rowNum + move[0]), true) &&
+             validateLocation((colNum + move[1]), false) ) {
+               paths.push({
+                 row: rowNum + move[0],
+                 col: colNum + move[1]
+               })
+        }
+      })
+      // row -> move[1], col -> move[0]
+      moves.forEach(move => {
+        if ( validateLocation((rowNum + move[1]), true) &&
+             validateLocation((colNum + move[0]), false) ) {
+               paths.push({
+                 row: rowNum + move[1],
+                 col: colNum + move[0]
+               })
+        }
+      })
       break;
     case pieces[4].name /* === bishop */:
+      const leftTop = colNum > rowNum ?
+                      [0, colNum - rowNum] :
+                      [rowNum - colNun, 0]
+      const leftBottom = colNum > rowNum ?
+                         [rowSize, colNum - rowNum] :
+                         [rowNum - colNum, rowSize]
+      let
+      if (isColSmaller) {
+
+      }
+
+      const moves = [
+        [ 1,  1],
+        [ 1, -1]
+      ];
+      const calculateNextCell = ([colNum, rowNum], moves) => {
+        return [colNum + moves[0], rowNum + moves[1]];
+      };
+
+      let currentCol =
+      while()
 
       break;
     case pieces[5].name /* === rook */:
-
+      const boardColIndex = Array.from({length: boardSize[0]}, (value, index) => index);
+      const boardRowIndex = Array.from({length: boardSize[1]}, (value, index) => index);
+      boardColIndex.forEach(colIndex => {
+        if(colNum !== colIndex) {
+          paths.push({
+            row: rowNum,
+            col: colIndex
+          })
+        }
+      })
+      boardRowIndex.forEach(rowIndex => {
+        if (rowNum !== rowIndex) {
+          paths.push({
+            row: rowIndex,
+            col: colNum
+          })
+        }
+      })
       break;
     default:
       break;
@@ -121,8 +194,9 @@ const BoardSlice = createSlice({
       if (piece === null || !state.selected.isSelected ) {
         return state;
       }
-      const paths = calculatePath(piece, colNum, rowNum);
+
       // apply the styling to the cells on the path of the currently selected piece
+      const paths = calculatePath(piece, colNum, rowNum);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = true;
       })
