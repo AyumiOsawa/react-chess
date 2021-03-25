@@ -89,9 +89,12 @@ const calculatePath = (piece, colNum, rowNum) => {
         [ 1,  2],
         [ 1, -2],
         [-1,  2],
-        [-1, -2]
+        [-1, -2],
+        [ 2,  1],
+        [ 2, -1],
+        [-2,  1],
+        [-2, -1],
       ];
-      // row -> move[0], col -> move[1]
       moves.forEach(move => {
         if ( validateLocation((rowNum + move[0]), true) &&
              validateLocation((colNum + move[1]), false) ) {
@@ -101,40 +104,44 @@ const calculatePath = (piece, colNum, rowNum) => {
                })
         }
       })
-      // row -> move[1], col -> move[0]
-      moves.forEach(move => {
-        if ( validateLocation((rowNum + move[1]), true) &&
-             validateLocation((colNum + move[0]), false) ) {
-               paths.push({
-                 row: rowNum + move[1],
-                 col: colNum + move[0]
-               })
-        }
-      })
       break;
     case pieces[4].name /* === bishop */:
-      const leftTop = colNum > rowNum ?
-                      [0, colNum - rowNum] :
-                      [rowNum - colNun, 0]
-      const leftBottom = colNum > rowNum ?
-                         [rowSize, colNum - rowNum] :
-                         [rowNum - colNum, rowSize]
-      let
-      if (isColSmaller) {
+      const leftTop    = colNum > rowNum ?
+                         [0               , colNum - rowNum] :
+                         [rowNum - colNum , 0              ];
+      const leftBottom = colNum + rowNum >= rowSize - 1 ?
+                         [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
+                         [rowNum + colNum , 0                              ];
 
-      }
 
-      const moves = [
-        [ 1,  1],
-        [ 1, -1]
-      ];
-      const calculateNextCell = ([colNum, rowNum], moves) => {
-        return [colNum + moves[0], rowNum + moves[1]];
-      };
+console.log('leftBottom',leftBottom);
+      const cellsToAdd = [{
+                            start    : leftTop,
+                            increment: [ 1,  1]
+                          },
+                          {
+                            start    : leftBottom,
+                            increment: [-1,  1]
+                          }];
 
-      let currentCol =
-      while()
-
+      cellsToAdd.forEach(info => {
+        const {start, increment} = info
+        let currentLocation = [...start];
+        while(validateLocation(currentLocation[0]) &&
+              validateLocation(currentLocation[1]) ) {
+          if (currentLocation[0] !== rowNum &&
+              currentLocation[1] !== colNum) {
+                paths.push({
+                  row: currentLocation[0],
+                  col: currentLocation[1]
+                });
+              }
+          currentLocation = [
+                              (currentLocation[0] + increment[0]),
+                              (currentLocation[1] + increment[1]),
+                            ]
+        }
+      });
       break;
     case pieces[5].name /* === rook */:
       const boardColIndex = Array.from({length: boardSize[0]}, (value, index) => index);
@@ -159,6 +166,7 @@ const calculatePath = (piece, colNum, rowNum) => {
     default:
       break;
   }
+  console.log('path', paths);
   return paths;
 }
 
@@ -187,7 +195,6 @@ const BoardSlice = createSlice({
       // reset the isOnPath state
       state.cells.forEach(row => {
         row.forEach(cell => {
-          cell.isOnPath ? console.log('cell', cell) : console.log(cell.isOnPath);
           cell.isOnPath = false
         })
       })
