@@ -123,7 +123,25 @@ const calculatePath = (piece, colNum, rowNum) => {
   let paths = [];
   switch (piece) {
     case pieces[0].name /* === king */:
-
+      const kingsMoves = [
+        [ 0,  1],
+        [ 0, -1],
+        [ 1,  0],
+        [-1,  0],
+        [ 1,  1],
+        [ 1, -1],
+        [-1,  1],
+        [-1,  -1]
+      ];
+      kingsMoves.forEach(move => {
+        if (validateLocation(rowNum + move[0]) &&
+            validateLocation(colNum + move[1])) {
+              paths.push({
+                row: rowNum + move[0],
+                col: colNum + move[1]
+              });
+        }
+      });
       break;
     case pieces[1].name /* ===  queen */:
       let cellsOnDiagonalPath = getCellsOnDiagonalPath(rowNum, colNum);
@@ -148,7 +166,7 @@ const calculatePath = (piece, colNum, rowNum) => {
       });
       break;
     case pieces[3].name /* === knight */:
-      const moves = [
+      const knightsMoves = [
         [ 1,  2],
         [ 1, -2],
         [-1,  2],
@@ -158,7 +176,7 @@ const calculatePath = (piece, colNum, rowNum) => {
         [-2,  1],
         [-2, -1],
       ];
-      moves.forEach(move => {
+      knightsMoves.forEach(move => {
         if ( validateLocation((rowNum + move[0]), true) &&
              validateLocation((colNum + move[1]), false) ) {
                paths.push({
