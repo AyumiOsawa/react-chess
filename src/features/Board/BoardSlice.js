@@ -63,16 +63,79 @@ const validateLocation = (num, isRow) => {
   }
   // validate the column location
   return num >= 0 && num < colSize;
-}
+};
+
+const getCellsOnDiagonalPath = (rowNum, colNum) => {
+  const leftTop    = colNum > rowNum ?
+                     [0               , colNum - rowNum] :
+                     [rowNum - colNum , 0              ];
+  const leftBottom = colNum + rowNum >= rowSize - 1 ?
+                     [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
+                     [rowNum + colNum , 0                              ];
+  const startPoints = [{
+                        start    : leftTop,
+                        increment: [ 1,  1]
+                      },
+                      {
+                        start    : leftBottom,
+                        increment: [-1,  1]
+                      }];
+  const cellsToAdd = [];
+  startPoints.forEach(info => {
+    const {start, increment} = info
+    let currentLocation = [...start];
+    while(validateLocation(currentLocation[0]) &&
+          validateLocation(currentLocation[1]) ) {
+      if (currentLocation[0] !== rowNum &&
+          currentLocation[1] !== colNum) {
+            cellsToAdd.push([
+              currentLocation[0],
+              currentLocation[1]
+            ]);
+          }
+      currentLocation = [
+                          (currentLocation[0] + increment[0]),
+                          (currentLocation[1] + increment[1]),
+                        ]
+    }
+  });
+  return cellsToAdd;
+};
+
+const getCellsOnCrossroadsPath = (rowNum, colNum) => {
+  const boardColIndex = Array.from({length: boardSize[0]}, (value, index) => index);
+  const boardRowIndex = Array.from({length: boardSize[1]}, (value, index) => index);
+  const cellsToAdd = []
+  boardColIndex.forEach(colIndex => {
+    if(colNum !== colIndex) {
+      cellsToAdd.push([rowNum, colIndex]);
+    }
+  });
+  boardRowIndex.forEach(rowIndex => {
+    if (rowNum !== rowIndex) {
+      cellsToAdd.push([rowIndex, colNum]);
+    }
+  });
+  return cellsToAdd;
+};
 
 const calculatePath = (piece, colNum, rowNum) => {
   let paths = [];
   switch (piece) {
     case pieces[0].name /* === king */:
-    //  TODO: add patterns
+
       break;
     case pieces[1].name /* ===  queen */:
-
+      let cellsOnDiagonalPath = getCellsOnDiagonalPath(rowNum, colNum);
+      const cellsToAddToQueensPath = cellsOnDiagonalPath.concat(
+                                      getCellsOnCrossroadsPath(rowNum, colNum)
+                                     );
+      cellsToAddToQueensPath.forEach(cell => {
+        paths.push({
+          row: cell[0],
+          col: cell[1]
+        });
+      });
       break;
     case pieces[2].name /* === pawn */:
       paths.push({
@@ -106,61 +169,21 @@ const calculatePath = (piece, colNum, rowNum) => {
       })
       break;
     case pieces[4].name /* === bishop */:
-      const leftTop    = colNum > rowNum ?
-                         [0               , colNum - rowNum] :
-                         [rowNum - colNum , 0              ];
-      const leftBottom = colNum + rowNum >= rowSize - 1 ?
-                         [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
-                         [rowNum + colNum , 0                              ];
-
-
-console.log('leftBottom',leftBottom);
-      const cellsToAdd = [{
-                            start    : leftTop,
-                            increment: [ 1,  1]
-                          },
-                          {
-                            start    : leftBottom,
-                            increment: [-1,  1]
-                          }];
-
-      cellsToAdd.forEach(info => {
-        const {start, increment} = info
-        let currentLocation = [...start];
-        while(validateLocation(currentLocation[0]) &&
-              validateLocation(currentLocation[1]) ) {
-          if (currentLocation[0] !== rowNum &&
-              currentLocation[1] !== colNum) {
-                paths.push({
-                  row: currentLocation[0],
-                  col: currentLocation[1]
-                });
-              }
-          currentLocation = [
-                              (currentLocation[0] + increment[0]),
-                              (currentLocation[1] + increment[1]),
-                            ]
-        }
+      const cellsToAddToBishosPath = getCellsOnDiagonalPath(rowNum, colNum);
+      cellsToAddToBishosPath.forEach(cell => {
+        paths.push({
+          row: cell[0],
+          col: cell[1]
+        });
       });
       break;
     case pieces[5].name /* === rook */:
-      const boardColIndex = Array.from({length: boardSize[0]}, (value, index) => index);
-      const boardRowIndex = Array.from({length: boardSize[1]}, (value, index) => index);
-      boardColIndex.forEach(colIndex => {
-        if(colNum !== colIndex) {
-          paths.push({
-            row: rowNum,
-            col: colIndex
-          })
-        }
-      })
-      boardRowIndex.forEach(rowIndex => {
-        if (rowNum !== rowIndex) {
-          paths.push({
-            row: rowIndex,
-            col: colNum
-          })
-        }
+      const cellsToAddToRooksPath = getCellsOnCrossroadsPath(rowNum, colNum);
+      cellsToAddToRooksPath.forEach(cell => {
+        paths.push({
+          row: cell[0],
+          col: cell[1]
+        });
       })
       break;
     default:
