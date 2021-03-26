@@ -119,8 +119,16 @@ const getCellsOnCrossroadsPath = (rowNum, colNum) => {
   return cellsToAdd;
 };
 
-const calculatePath = (piece, colNum, rowNum) => {
+const calculatePath = (piece, colNum, rowNum, state) => {
   let paths = [];
+  const checkCellVacancy = (rowNum, colNum, state) => {
+    console.log('board', state);
+    if (state.board.cells[rowNum][colNum].piece === null) {
+      return false;
+    }
+    return true;
+  };
+
   switch (piece) {
     case pieces[0].name /* === king */:
       const kingsMoves = [
@@ -134,8 +142,8 @@ const calculatePath = (piece, colNum, rowNum) => {
         [-1,  -1]
       ];
       kingsMoves.forEach(move => {
-        if (validateLocation(rowNum + move[0]) &&
-            validateLocation(colNum + move[1])) {
+        if ( validateLocation(rowNum + move[0]) &&
+             validateLocation(colNum + move[1]) ) {
               paths.push({
                 row: rowNum + move[0],
                 col: colNum + move[1]
@@ -156,6 +164,22 @@ const calculatePath = (piece, colNum, rowNum) => {
       });
       break;
     case pieces[2].name /* === pawn */:
+      const pawnsMoves = [
+        [-1, 0],
+        [-2, 0]
+      ];
+      for (let i = 0; i < pawnsMoves.length; i++) {
+        const row = rowNum + pawnsMoves[i][0];
+        const col = colNum + pawnsMoves[i][1];
+        if (checkCellVacancy(row, col, state)) {
+          paths.push({
+            row: row,
+            col: col
+          });
+        } else {
+          break;
+        }
+      }
       paths.push({
         row: rowNum - 1,
         col: colNum
@@ -207,7 +231,6 @@ const calculatePath = (piece, colNum, rowNum) => {
     default:
       break;
   }
-  console.log('path', paths);
   return paths;
 }
 
@@ -244,7 +267,7 @@ const BoardSlice = createSlice({
       }
 
       // apply the styling to the cells on the path of the currently selected piece
-      const paths = calculatePath(piece, colNum, rowNum);
+      const paths = calculatePath(piece, colNum, rowNum, state);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = true;
       })
