@@ -84,8 +84,8 @@ const getCellsOnDiagonalPath = (rowNum, colNum) => {
   startPoints.forEach(info => {
     const {start, increment} = info
     let currentLocation = [...start];
-    while(validateLocation(currentLocation[0]) &&
-          validateLocation(currentLocation[1]) ) {
+    while(validateLocation(currentLocation[0], true)  &&
+          validateLocation(currentLocation[1], false)    ) {
       if (currentLocation[0] !== rowNum &&
           currentLocation[1] !== colNum) {
             cellsToAdd.push([
@@ -119,16 +119,15 @@ const getCellsOnCrossroadsPath = (rowNum, colNum) => {
   return cellsToAdd;
 };
 
+const checkCellVacancy = (rowNum, colNum, state) => {
+  if (state.cells[rowNum][colNum].piece === null) {
+    return true;
+  }
+  return false;
+};
+
 const calculatePath = (piece, colNum, rowNum, state) => {
   let paths = [];
-  const checkCellVacancy = (rowNum, colNum, state) => {
-    console.log('board', state);
-    if (state.board.cells[rowNum][colNum].piece === null) {
-      return false;
-    }
-    return true;
-  };
-
   switch (piece) {
     case pieces[0].name /* === king */:
       const kingsMoves = [
@@ -142,11 +141,14 @@ const calculatePath = (piece, colNum, rowNum, state) => {
         [-1,  -1]
       ];
       kingsMoves.forEach(move => {
-        if ( validateLocation(rowNum + move[0]) &&
-             validateLocation(colNum + move[1]) ) {
+        const row = rowNum + move[0];
+        const col = colNum + move[1]
+        if ( validateLocation(row, true)       &&
+             validateLocation(col, false)      &&
+             checkCellVacancy(row, col, state)    ) {
               paths.push({
-                row: rowNum + move[0],
-                col: colNum + move[1]
+                row: row,
+                col: col
               });
         }
       });
@@ -157,10 +159,12 @@ const calculatePath = (piece, colNum, rowNum, state) => {
                                       getCellsOnCrossroadsPath(rowNum, colNum)
                                      );
       cellsToAddToQueensPath.forEach(cell => {
-        paths.push({
-          row: cell[0],
-          col: cell[1]
-        });
+        if (checkCellVacancy(cell[0], cell[1], state)) {
+          paths.push({
+            row: cell[0],
+            col: cell[1]
+          });
+        }
       });
       break;
     case pieces[2].name /* === pawn */:
@@ -180,14 +184,14 @@ const calculatePath = (piece, colNum, rowNum, state) => {
           break;
         }
       }
-      paths.push({
-        row: rowNum - 1,
-        col: colNum
-      },
-      {
-        row: rowNum - 2,
-        col: colNum
-      });
+      // paths.push({
+      //   row: rowNum - 1,
+      //   col: colNum
+      // },
+      // {
+      //   row: rowNum - 2,
+      //   col: colNum
+      // });
       break;
     case pieces[3].name /* === knight */:
       const knightsMoves = [
@@ -201,11 +205,14 @@ const calculatePath = (piece, colNum, rowNum, state) => {
         [-2, -1],
       ];
       knightsMoves.forEach(move => {
-        if ( validateLocation((rowNum + move[0]), true) &&
-             validateLocation((colNum + move[1]), false) ) {
+        const row = rowNum + move[0];
+        const col = colNum + move[1];
+        if ( validateLocation(row, true)        &&
+             validateLocation(col, false)       &&
+             checkCellVacancy(row, col, state)    ) {
                paths.push({
-                 row: rowNum + move[0],
-                 col: colNum + move[1]
+                 row: row,
+                 col: col
                })
         }
       })
@@ -213,19 +220,23 @@ const calculatePath = (piece, colNum, rowNum, state) => {
     case pieces[4].name /* === bishop */:
       const cellsToAddToBishosPath = getCellsOnDiagonalPath(rowNum, colNum);
       cellsToAddToBishosPath.forEach(cell => {
-        paths.push({
-          row: cell[0],
-          col: cell[1]
-        });
+        if (checkCellVacancy(cell[0], cell[1], state)) {
+          paths.push({
+            row: cell[0],
+            col: cell[1]
+          });
+        }
       });
       break;
     case pieces[5].name /* === rook */:
       const cellsToAddToRooksPath = getCellsOnCrossroadsPath(rowNum, colNum);
       cellsToAddToRooksPath.forEach(cell => {
-        paths.push({
-          row: cell[0],
-          col: cell[1]
-        });
+        if (checkCellVacancy(cell[0], cell[1], state)) {
+          paths.push({
+            row: cell[0],
+            col: cell[1]
+          })
+        }
       })
       break;
     default:
@@ -265,8 +276,17 @@ const BoardSlice = createSlice({
       if (piece === null || !state.selected.isSelected ) {
         return state;
       }
-
       // apply the styling to the cells on the path of the currently selected piece
+      // const cellsWithLocations = state.cells.map((row, rowIndex) => {
+      //   return row.map((cell, colIndex) => {
+      //             cell.row = rowIndex;
+      //             cell.col = colIndex;
+      //             return cell;
+      //           })
+      // });
+      // const flattened = cellsWithLocations.flat(2);
+      // const occupiedCells = flattened.filter(cell => cell.piece !== null);
+      // console.log('occupiedCells',occupiedCells);
       const paths = calculatePath(piece, colNum, rowNum, state);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = true;
