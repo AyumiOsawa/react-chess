@@ -21,8 +21,8 @@ export default function Cell(props) {
         } = props;
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
-
-  // Set a piece om a cell if needed
+// TODO: delete Row component and integrate it to Cell component
+  // Set a piece on a cell if needed
   const board = useSelector(selectBoard);
   const piece = board.cells[rowNum][colNum].piece;
   const pieceInfoCollection = constants.PIECES.info;
@@ -43,7 +43,6 @@ export default function Cell(props) {
     return board.cells[rowNum][colNum].isOnPath;
   };
   const getClassNames = (colNum, rowNum) => {
-    // TODO:
     //  if the cell it selected, it should be colored
     let cellClassNames = checkIsSelected(colNum, rowNum) ?
                            `cell ${bgColor} selected` :
