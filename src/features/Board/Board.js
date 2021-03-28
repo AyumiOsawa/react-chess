@@ -1,5 +1,5 @@
 import './Board.css';
-import Row from '../Row/Row';
+import Cell from '../Cell/Cell';
 import constants from '../../shared/constants';
 
 export default function Board() {
@@ -24,23 +24,76 @@ export default function Board() {
       className="board"
     >
       {
-        Array(rowNum).fill(null).map((row, index) => {
+        Array(rowNum).fill(null).map((row, rowIndex) => {
           return (
-            <Row
-              key={index}
-              rowNum={index}
-              cellSize={cellSize}
-              boardLeft={boardLeft}
-              cellStyles={
-                Object.assign({}, cellStyles, {
-                    top: `${boardTop + cellSize * index}px`
-                  })
-              }
-            />
+              <div
+                key={rowIndex}
+                id={`row-${rowIndex}`}
+                className='row'
+              >
+                  {
+                    Array(columnNum).fill(null).map((cell, colIndex) => {
+                      return (
+                        <Cell
+                          key={colIndex}
+                          colNum={colIndex}
+                          rowNum={rowIndex}
+                          bgColor={
+                            rowIndex % 2 === colIndex % 2 ?
+                            'white' :
+                            'black'
+                          }
+                          cellStyles={
+                            Object.assign({}, cellStyles, {
+                                top: `${boardTop + cellSize * rowIndex}px`,
+                                left: `${boardLeft + cellSize * colIndex}px`
+                            })
+                          }
+                        />
+                      );
+                    })
+                  }
+              </div>
           );
         })
-
       }
     </div>
   );
 }
+
+// ----------
+
+//
+//
+// export default function Row({ rowNum, cellSize, boardLeft, cellStyles }) {
+//   const columnNum = constants.BOARD.size[0];
+//
+//   return (
+//     // <div
+//     //   id={`row-${rowNum}`}
+//     //   className='row'
+//     // >
+//     {
+//       Array(columnNum).fill(null).map((cell, index) => {
+//         return (
+//           <Cell
+//             key={index}
+//             colNum={index}
+//             rowNum={rowNum}
+//             bgColor={
+//               rowNum % 2 === index % 2 ?
+//               'white' :
+//               'black'
+//             }
+//             cellStyles={
+//               Object.assign({}, cellStyles, {
+//                 left: `${boardLeft + cellSize * index}px`
+//               })
+//             }
+//           />
+//         );
+//       })
+//     }
+//     // </div>
+//   );
+// }
