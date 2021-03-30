@@ -276,17 +276,6 @@ const BoardSlice = createSlice({
       if (piece === null || !state.selected.isSelected ) {
         return state;
       }
-      // apply the styling to the cells on the path of the currently selected piece
-      // const cellsWithLocations = state.cells.map((row, rowIndex) => {
-      //   return row.map((cell, colIndex) => {
-      //             cell.row = rowIndex;
-      //             cell.col = colIndex;
-      //             return cell;
-      //           })
-      // });
-      // const flattened = cellsWithLocations.flat(2);
-      // const occupiedCells = flattened.filter(cell => cell.piece !== null);
-      // console.log('occupiedCells',occupiedCells);
       const paths = calculatePath(piece, colNum, rowNum, state);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = true;
