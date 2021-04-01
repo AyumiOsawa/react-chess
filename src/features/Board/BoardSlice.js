@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import constants from '../../shared/constants';
 let initialSetUp = require('../../data/initialSetUp.json');
 const pieces = constants.PIECES.info;
-console.log('initialSetUp',initialSetUp);
+// console.log('initialSetUp',initialSetUp);
+// console.log('type',typeof initialSetUp);
 
 // const setUpBoard = (columnNum, rowNum) => {
 //   const SetCell = function(row, column, piece) {
@@ -48,7 +49,10 @@ const createInitialBoard = (initialSelectedCell) => {
   const initialBoardState = Array.from({length: rowNum   }, () => {
     return initialRowState.map(cell => Object.assign({}, cell));
   });
-  const pieceLocations = setUpBoard(rowNum, colNum);
+  // const pieceLocations = setUpBoard(rowNum, colNum);
+  const pieceLocations = Object.values(initialSetUp);
+  // console.log('pieceLocations',pieceLocations);
+  // console.log('type pieceLocations', typeof pieceLocations);
   pieceLocations.forEach(cell => {
     initialBoardState[cell.row][cell.column].piece = cell.piece;
   })
