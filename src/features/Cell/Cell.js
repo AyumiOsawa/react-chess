@@ -21,7 +21,6 @@ export default function Cell(props) {
         } = props;
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
-// TODO: delete Row component and integrate it to Cell component
   // Set a piece on a cell if needed
   const board = useSelector(selectBoard);
   const piece = board.cells[rowNum][colNum].piece;
