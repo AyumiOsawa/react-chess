@@ -1,43 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import constants from '../../shared/constants';
-let initialSetUp = require('../../data/initialSetUp.json');
+import initialSetUp from '../../data/initialSetUp.json';
 const pieces = constants.PIECES.info;
-// console.log('initialSetUp',initialSetUp);
-// console.log('type',typeof initialSetUp);
-
-// const setUpBoard = (columnNum, rowNum) => {
-//   const SetCell = function(row, column, piece) {
-//     this.collection = {
-//       row   : row,
-//       column: column,
-//       piece : piece
-//     };
-//     return this.collection;
-//   };
-//   const pieceLocations = [
-//     // rook: at the corners
-//    new SetCell(rowNum - 1,             0, pieces[5].name),
-//    new SetCell(rowNum - 1, columnNum - 1, pieces[5].name),
-//     // knights: next to rooks
-//    new SetCell(rowNum - 1,             1, pieces[3].name),
-//    new SetCell(rowNum - 1, columnNum - 2, pieces[3].name),
-//     // bishop: next to knights
-//    new SetCell(rowNum - 1,             2, pieces[4].name),
-//    new SetCell(rowNum - 1, columnNum - 3, pieces[4].name),
-//     // queen: next to one of the bishops, on the cell with the same color
-//     // In this case, next to the right bishop
-//    new SetCell(rowNum - 1, columnNum - 4, pieces[1].name),
-//     // king: between the queen and another bishop
-//    new SetCell(rowNum - 1,             3, pieces[0].name)
-//   ];
-//   // pawn: all the cells in the next row
-//   for(let col = 0; col < columnNum; col++) {
-//     pieceLocations.push(new SetCell(rowNum - 2, col, pieces[2].name));
-//   }
-//   return pieceLocations;
-// };
-
 const createInitialBoard = (initialSelectedCell) => {
   const colNum = constants.BOARD.size[0];
   const rowNum    = constants.BOARD.size[1];
@@ -49,10 +14,7 @@ const createInitialBoard = (initialSelectedCell) => {
   const initialBoardState = Array.from({length: rowNum   }, () => {
     return initialRowState.map(cell => Object.assign({}, cell));
   });
-  // const pieceLocations = setUpBoard(rowNum, colNum);
   const pieceLocations = Object.values(initialSetUp);
-  // console.log('pieceLocations',pieceLocations);
-  // console.log('type pieceLocations', typeof pieceLocations);
   pieceLocations.forEach(cell => {
     initialBoardState[cell.row][cell.column].piece = cell.piece;
   })
@@ -189,14 +151,6 @@ const calculatePath = (piece, colNum, rowNum, state) => {
           break;
         }
       }
-      // paths.push({
-      //   row: rowNum - 1,
-      //   col: colNum
-      // },
-      // {
-      //   row: rowNum - 2,
-      //   col: colNum
-      // });
       break;
     case pieces[3].name /* === knight */:
       const knightsMoves = [
