@@ -1,6 +1,9 @@
 export default Object.freeze({
   BOARD : {
-    size: [8, 8] // minimun [8, 8]
+    size: [
+        /* row = */ 8,
+        /* col = */ 8
+    ] // minimun [8, 8]
   },
   PIECES: {
     number: 8,
