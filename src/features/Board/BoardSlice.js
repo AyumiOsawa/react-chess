@@ -33,41 +33,89 @@ const validateLocation = (num, isRow) => {
   return num >= 0 && num < colSize;
 };
 
-const getCellsOnDiagonalPath = (rowNum, colNum) => {
-  const leftTop    = colNum > rowNum ?
-                     [0               , colNum - rowNum] :
-                     [rowNum - colNum , 0              ];
-  const leftBottom = colNum + rowNum >= rowSize - 1 ?
-                     [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
-                     [rowNum + colNum , 0                              ];
-  const startPoints = [{
-                        start    : leftTop,
-                        increment: [ 1,  1]
-                      },
-                      {
-                        start    : leftBottom,
-                        increment: [-1,  1]
-                      }];
-  const cellsToAdd = [];
-  startPoints.forEach(info => {
-    const {start, increment} = info
-    let currentLocation = [...start];
-    while(validateLocation(currentLocation[0], true)  &&
-          validateLocation(currentLocation[1], false)    ) {
-      if (currentLocation[0] !== rowNum &&
-          currentLocation[1] !== colNum) {
-            cellsToAdd.push([
-              currentLocation[0],
-              currentLocation[1]
-            ]);
-          }
-      currentLocation = [
-                          (currentLocation[0] + increment[0]),
-                          (currentLocation[1] + increment[1]),
-                        ]
+const getDiagonalPath = (rowNum, colNum, state) => {
+    const leftUp = [];
+    let row, col;
+    for (row = rowNum - 1, col = colNum - 1;
+         row >= 0 &&       col >= 0;
+         row--,            col--) {
+        if (isCellVacant(row, col, state)) {
+            leftUp.push([row, col]);
+        } else {
+            break;
+        }
     }
-  });
-  return cellsToAdd;
+    const rightUp = [];
+    for (row = rowNum - 1, col = colNum + 1;
+         row >= 0 &&       col < 8;
+         row--,            col++) {
+        if (isCellVacant(row, col, state)) {
+            rightUp.push([row, col]);
+        } else {
+            break;
+        }
+    }
+    const leftDown = [];
+    for (row = rowNum + 1, col = colNum - 1;
+         row < 8 &&        col >= 0;
+         row++,            col--) {
+        if (isCellVacant(row, col, state)) {
+            leftDown.push([row, col]);
+        } else {
+            break;
+        }
+    }
+    const rightDown = [];
+    for (row = rowNum + 1, col = colNum + 1;
+         row < 8 &&        col < 8;
+         row++,            col++) {
+        if (isCellVacant(row, col, state)) {
+            rightDown.push([row, col]);
+        } else {
+            break;
+        }
+    }
+
+    return [
+        ...leftUp,
+        ...rightUp,
+        ...leftDown,
+        ...rightDown
+    ];
+  // const leftTop    = colNum > rowNum ?
+  //                    [0               , colNum - rowNum] :
+  //                    [rowNum - colNum , 0              ];
+  // const leftBottom = colNum + rowNum >= rowSize - 1 ?
+  //                    [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
+  //                    [rowNum + colNum , 0                              ];
+  // const startPoints = [{
+  //                       start    : leftTop,
+  //                       increment: [ 1,  1]
+  //                     },
+  //                     {
+  //                       start    : leftBottom,
+  //                       increment: [-1,  1]
+  //                     }];
+  // const cellsToAdd = [];
+  // startPoints.forEach(info => {
+  //   const {start, increment} = info
+  //   let currentLocation = [...start];
+  //   while(validateLocation(currentLocation[0], true)  &&
+  //         validateLocation(currentLocation[1], false)    ) {
+  //     if (currentLocation[0] !== rowNum &&
+  //         currentLocation[1] !== colNum) {
+  //           cellsToAdd.push([
+  //             currentLocation[0],
+  //             currentLocation[1]
+  //           ]);
+  //         }
+  //     currentLocation = [
+  //                         (currentLocation[0] + increment[0]),
+  //                         (currentLocation[1] + increment[1]),
+  //                       ]
+  //   }
+  // });
+  // return cellsToAdd;
 };
 
 const getCrossroadsPath = (rowNum, colNum, state) => {
@@ -103,7 +151,6 @@ const getCrossroadsPath = (rowNum, colNum, state) => {
           break;
       }
   }
-
   return [
       ...up,
       ...down,
@@ -147,17 +194,15 @@ const calculatePath = (piece, colNum, rowNum, state) => {
       });
       break;
     case pieces[1].name /* ===  queen */:
-      let cellsOnDiagonalPath = getCellsOnDiagonalPath(rowNum, colNum);
-      const cellsToAddToQueensPath = cellsOnDiagonalPath.concat(
+      let diagonalQueensPath = getDiagonalPath(rowNum, colNum, state);
+      const queensPath = diagonalQueensPath.concat(
                                       getCrossroadsPath(rowNum, colNum, state)
                                      );
-      cellsToAddToQueensPath.forEach(cell => {
-        if (isCellVacant(cell[0], cell[1], state)) {
+      queensPath.forEach(cell => {
           paths.push({
-            row: cell[0],
-            col: cell[1]
+              row: cell[0],
+              col: cell[1]
           });
-        }
       });
       break;
     case pieces[2].name /* === pawn */:
@@ -203,14 +248,12 @@ const calculatePath = (piece, colNum, rowNum, state) => {
       })
       break;
     case pieces[4].name /* === bishop */:
-      const cellsToAddToBishosPath = getCellsOnDiagonalPath(rowNum, colNum);
-      cellsToAddToBishosPath.forEach(cell => {
-        if (isCellVacant(cell[0], cell[1], state)) {
+      const bishosPath = getDiagonalPath(rowNum, colNum, state);
+      bishosPath.forEach(cell => {
           paths.push({
             row: cell[0],
             col: cell[1]
           });
-        }
       });
       break;
     case pieces[5].name /* === rook */:
