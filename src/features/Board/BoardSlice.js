@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import constants from '../../shared/constants';
 import initialSetUp from '../../data/initialSetUp.json';
+
 const pieces = constants.PIECES.info;
 const createInitialBoard = (initialSelectedCell) => {
   const colNum = constants.BOARD.size[0];
@@ -11,7 +12,7 @@ const createInitialBoard = (initialSelectedCell) => {
                              isOnPath: false
                            };
   const initialRowState   = Array.from({length: colNum}, () => ({...initialCellState}));
-  const initialBoardState = Array.from({length: rowNum   }, () => {
+  const initialBoardState = Array.from({length: rowNum}, () => {
     return initialRowState.map(cell => Object.assign({}, cell));
   });
   const pieceLocations = Object.values(initialSetUp);
@@ -22,8 +23,8 @@ const createInitialBoard = (initialSelectedCell) => {
 };
 
 const boardSize = constants.BOARD.size;
-const colSize = boardSize[0];
-const rowSize = boardSize[1];
+const colSize = boardSize[1];
+const rowSize = boardSize[0];
 const validateLocation = (num, isRow) => {
   if (isRow) {  // validate the row location
     return num >= 0 && num < rowSize;
@@ -69,24 +70,49 @@ const getCellsOnDiagonalPath = (rowNum, colNum) => {
   return cellsToAdd;
 };
 
-const getCellsOnCrossroadsPath = (rowNum, colNum) => {
-  const boardColIndex = Array.from({length: boardSize[0]}, (value, index) => index);
-  const boardRowIndex = Array.from({length: boardSize[1]}, (value, index) => index);
-  const cellsToAdd = []
-  boardColIndex.forEach(colIndex => {
-    if(colNum !== colIndex) {
-      cellsToAdd.push([rowNum, colIndex]);
-    }
-  });
-  boardRowIndex.forEach(rowIndex => {
-    if (rowNum !== rowIndex) {
-      cellsToAdd.push([rowIndex, colNum]);
-    }
-  });
-  return cellsToAdd;
+const getCrossroadsPath = (rowNum, colNum, state) => {
+  const up = [];
+  for (let i = rowNum - 1; i >= 0; i--) {
+      if (isCellVacant(i, colNum, state)) {
+          up.push([i, colNum])
+      } else {
+          break;
+      }
+  }
+  const down = [];
+  for (let i = rowNum + 1; i < 8; i++) {
+      if (isCellVacant(i, colNum, state)) {
+          down.push([i, colNum])
+      } else {
+          break;
+      }
+  }
+  const left = [];
+  for (let i = colNum - 1; i >= 0; i--) {
+      if (isCellVacant(rowNum, i, state)) {
+          left.push([rowNum, i])
+      } else {
+          break;
+      }
+  }
+  const right = [];
+  for (let i = colNum + 1; i < 8; i++) {
+      if (isCellVacant(rowNum, i, state)) {
+          right.push([rowNum, i])
+      } else {
+          break;
+      }
+  }
+
+  return [
+      ...up,
+      ...down,
+      ...left,
+      ...right
+  ];
 };
 
-const checkCellVacancy = (rowNum, colNum, state) => {
+const isCellVacant = (rowNum, colNum, state) => {
   if (state.cells[rowNum][colNum].piece === null) {
     return true;
   }
@@ -112,7 +138,7 @@ const calculatePath = (piece, colNum, rowNum, state) => {
         const col = colNum + move[1]
         if ( validateLocation(row, true)       &&
              validateLocation(col, false)      &&
-             checkCellVacancy(row, col, state)    ) {
+             isCellVacant(row, col, state)    ) {
               paths.push({
                 row: row,
                 col: col
@@ -123,10 +149,10 @@ const calculatePath = (piece, colNum, rowNum, state) => {
     case pieces[1].name /* ===  queen */:
       let cellsOnDiagonalPath = getCellsOnDiagonalPath(rowNum, colNum);
       const cellsToAddToQueensPath = cellsOnDiagonalPath.concat(
-                                      getCellsOnCrossroadsPath(rowNum, colNum)
+                                      getCrossroadsPath(rowNum, colNum, state)
                                      );
       cellsToAddToQueensPath.forEach(cell => {
-        if (checkCellVacancy(cell[0], cell[1], state)) {
+        if (isCellVacant(cell[0], cell[1], state)) {
           paths.push({
             row: cell[0],
             col: cell[1]
@@ -142,7 +168,7 @@ const calculatePath = (piece, colNum, rowNum, state) => {
       for (let i = 0; i < pawnsMoves.length; i++) {
         const row = rowNum + pawnsMoves[i][0];
         const col = colNum + pawnsMoves[i][1];
-        if (checkCellVacancy(row, col, state)) {
+        if (isCellVacant(row, col, state)) {
           paths.push({
             row: row,
             col: col
@@ -168,7 +194,7 @@ const calculatePath = (piece, colNum, rowNum, state) => {
         const col = colNum + move[1];
         if ( validateLocation(row, true)        &&
              validateLocation(col, false)       &&
-             checkCellVacancy(row, col, state)    ) {
+             isCellVacant(row, col, state)    ) {
                paths.push({
                  row: row,
                  col: col
@@ -179,7 +205,7 @@ const calculatePath = (piece, colNum, rowNum, state) => {
     case pieces[4].name /* === bishop */:
       const cellsToAddToBishosPath = getCellsOnDiagonalPath(rowNum, colNum);
       cellsToAddToBishosPath.forEach(cell => {
-        if (checkCellVacancy(cell[0], cell[1], state)) {
+        if (isCellVacant(cell[0], cell[1], state)) {
           paths.push({
             row: cell[0],
             col: cell[1]
@@ -188,14 +214,12 @@ const calculatePath = (piece, colNum, rowNum, state) => {
       });
       break;
     case pieces[5].name /* === rook */:
-      const cellsToAddToRooksPath = getCellsOnCrossroadsPath(rowNum, colNum);
-      cellsToAddToRooksPath.forEach(cell => {
-        if (checkCellVacancy(cell[0], cell[1], state)) {
+      const rooksPath = getCrossroadsPath(rowNum, colNum, state);
+      rooksPath.forEach(cell => {
           paths.push({
             row: cell[0],
             col: cell[1]
           })
-        }
       })
       break;
     default:
