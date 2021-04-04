@@ -81,40 +81,6 @@ const getDiagonalPath = (rowNum, colNum, state) => {
         ...leftDown,
         ...rightDown
     ];
-  // const leftTop    = colNum > rowNum ?
-  //                    [0               , colNum - rowNum] :
-  //                    [rowNum - colNum , 0              ];
-  // const leftBottom = colNum + rowNum >= rowSize - 1 ?
-  //                    [rowSize - 1     , colNum - (rowSize - 1 - rowNum)] :
-  //                    [rowNum + colNum , 0                              ];
-  // const startPoints = [{
-  //                       start    : leftTop,
-  //                       increment: [ 1,  1]
-  //                     },
-  //                     {
-  //                       start    : leftBottom,
-  //                       increment: [-1,  1]
-  //                     }];
-  // const cellsToAdd = [];
-  // startPoints.forEach(info => {
-  //   const {start, increment} = info
-  //   let currentLocation = [...start];
-  //   while(validateLocation(currentLocation[0], true)  &&
-  //         validateLocation(currentLocation[1], false)    ) {
-  //     if (currentLocation[0] !== rowNum &&
-  //         currentLocation[1] !== colNum) {
-  //           cellsToAdd.push([
-  //             currentLocation[0],
-  //             currentLocation[1]
-  //           ]);
-  //         }
-  //     currentLocation = [
-  //                         (currentLocation[0] + increment[0]),
-  //                         (currentLocation[1] + increment[1]),
-  //                       ]
-  //   }
-  // });
-  // return cellsToAdd;
 };
 
 const getCrossroadsPath = (rowNum, colNum, state) => {
