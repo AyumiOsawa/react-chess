@@ -21,8 +21,9 @@ export default function Cell(props) {
         } = props;
   let cellStyles = {...rest.cellStyles};
   const dispatch = useDispatch();
-  // Set a piece on a cell if needed
   const board = useSelector(selectBoard);
+
+  // Set a piece on a cell if needed
   const piece = board.cells[rowNum][colNum].piece;
   const pieceInfoCollection = constants.PIECES.info;
   if (piece !== null) {
@@ -30,6 +31,7 @@ export default function Cell(props) {
     cellStyles.backgroundImage = `url(${pieceInfo[0].img})`;
     cellStyles.backgroundSize = 'contain';
   }
+
   // set the background color if it is selected
   const checkIsSelected = (colNum, rowNum) => {
     if (board.selected.column === colNum &&
@@ -58,9 +60,14 @@ export default function Cell(props) {
       id={`cell-${colNum}-${rowNum}`}
       className={getClassNames(colNum, rowNum)}
       style={cellStyles}
-      onClick={() => {
-        dispatch(selectCell({colNum, rowNum}));
-        dispatch(colorPath({colNum, rowNum}));
+      onClick={() => { 
+          if (board.selected.isSelected &&
+              board.cells[rowNum][colNum].isOnPath) {
+              dispatch(move({colNum, rowNum}));
+          } else if (!board.selected.isSelected) {
+              dispatch(selectCell({colNum, rowNum}));
+              dispatch(colorPath({colNum, rowNum}));
+          }
       }}
     >
     </div>
