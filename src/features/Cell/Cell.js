@@ -60,9 +60,8 @@ export default function Cell(props) {
       id={`cell-${colNum}-${rowNum}`}
       className={getClassNames(colNum, rowNum)}
       style={cellStyles}
-      onClick={() => { 
-          if (board.selected.isSelected &&
-              board.cells[rowNum][colNum].isOnPath) {
+      onClick={() => {
+          if (board.selected.isSelected) {
               dispatch(move({colNum, rowNum}));
           } else if (!board.selected.isSelected) {
               dispatch(selectCell({colNum, rowNum}));

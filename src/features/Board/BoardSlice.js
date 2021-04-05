@@ -255,17 +255,22 @@ const BoardSlice = createSlice({
       const oldRowNum = state.selected.row;
       const oldColNum = state.selected.column;
       const movingPiece = state.cells[oldRowNum][oldColNum].piece;
-      console.log('movingPiece',movingPiece);
+      const paths = calculatePath(movingPiece, oldRowNum, oldColNum, state);
+
+      if (state.cells[rowNum][colNum].isOnPath) {
+          // remove the piece from the old cell
+          state.cells[oldRowNum][oldColNum].piece = null;
+          // set the piece in the new cell
+          state.cells[rowNum][colNum].piece = movingPiece;
+      }
 
       // remove the color on the paths
-      const paths = calculatePath(movingPiece, oldRowNum, oldColNum, state);
+      console.log('movingPiece',movingPiece);
+      console.log('oldRowNum',oldRowNum);
+      console.log('oldColNum',oldColNum);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = false;
       });
-      // remove the piece from the old cell
-      state.cells[state.selected.row][state.selected.column].piece = null;
-      // set the piece in the new cell
-      state.cells[rowNum][colNum].piece = movingPiece;
 
       // reset the state.selected
       state.selected = initialStateSelected;
