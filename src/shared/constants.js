@@ -10,27 +10,45 @@ export default Object.freeze({
     info: [
       {
         name: 'king',
-        img : './img/king.png'
+        img : {
+            black: './img/king_black.png',
+            white: 
+        }
       },
       {
         name: 'queen',
-        img : './img/queen.png'
+        img : {
+            black: './img/queen_black.png',
+            white:
+        }
       },
       {
         name: 'pawn',
-        img : './img/pawn.png'
+        img : {
+            black: './img/pawn_black.png',
+            white:
+        }
       },
       {
         name: 'knight',
-        img : './img/knight.png'
+        img : {
+            black: './img/knight_black.png',
+            white:
+        }
       },
       {
         name: 'bishop',
-        img : './img/bishop.png'
+        img : {
+            black: './img/bishop_black.png',
+            white:
+        }
       },
       {
         name: 'rook',
-        img : './img/rook.png'
+        img : {
+            black: './img/rook_black.png',
+            white:
+        }
       },
     ]
   }

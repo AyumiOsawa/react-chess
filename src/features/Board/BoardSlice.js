@@ -143,7 +143,7 @@ const calculatePath = (piece, rowNum, colNum, state) => {
           [ 1,  1],
           [ 1, -1],
           [-1,  1],
-          [-1,  -1]
+          [-1, -1]
         ];
         kingsMoves.forEach(move => {
           const row = rowNum + move[0];
@@ -158,7 +158,7 @@ const calculatePath = (piece, rowNum, colNum, state) => {
           }
         });
         break;
-      case pieces[1].name /* ===  queen */:
+      case pieces[1].name /* === queen */:
         const queensPath = [
                               ...getDiagonalPath(rowNum, colNum, state),
                               ...getCrossroadsPath(rowNum, colNum, state)
@@ -265,9 +265,6 @@ const BoardSlice = createSlice({
       }
 
       // remove the color on the paths
-      console.log('movingPiece',movingPiece);
-      console.log('oldRowNum',oldRowNum);
-      console.log('oldColNum',oldColNum);
       paths.forEach(cell => {
         state.cells[cell.row][cell.col].isOnPath = false;
       });
