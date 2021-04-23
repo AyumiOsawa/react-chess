@@ -25,10 +25,11 @@ export default function Cell(props) {
 
   // Set a piece on a cell if needed
   const piece = board.cells[rowNum][colNum].piece;
+  const color = board.cells[rowNum][colNum].color;
   const pieceInfoCollection = constants.PIECES.info;
   if (piece !== null) {
     const pieceInfo = pieceInfoCollection.filter(info => info.name === piece);
-    cellStyles.backgroundImage = `url(${pieceInfo[0].img})`;
+    cellStyles.backgroundImage = `url(${pieceInfo[0].img[color]})`;
     cellStyles.backgroundSize = 'contain';
   }
 

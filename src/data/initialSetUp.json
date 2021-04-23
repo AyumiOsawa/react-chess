@@ -1,82 +1,194 @@
 {
     "0": {
             "piece" : "rook",
+            "color": "black",
             "row"   : 7,
             "column" : 0
         },
     "1": {
             "piece" : "rook",
+            "color": "black",
             "row"   : 7,
             "column" : 7
         },
     "2":  {
             "piece" : "knight",
+            "color": "black",
             "row"   : 7,
             "column" : 1
         },
     "3":  {
             "piece" : "knight",
+            "color": "black",
             "row"   : 7,
             "column" : 6
         },
     "4":  {
             "piece" : "bishop",
+            "color": "black",
             "row"   : 7,
             "column" : 2
         },
     "5":  {
             "piece" : "bishop",
+            "color": "black",
             "row"   : 7,
             "column" : 5
         },
     "6":  {
             "piece" : "queen",
+            "color": "black",
             "row"   : 7,
             "column" : 4
         },
     "7":  {
             "piece" : "king",
+            "color": "black",
             "row"   : 7,
             "column" : 3
         },
     "8":  {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 0
         },
     "9":  {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 1
         },
     "10": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 2
         },
     "11": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 3
         },
     "12": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 4
         },
     "13": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 5
         },
     "14": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
             "column" : 6
         },
     "15": {
             "piece" : "pawn",
+            "color": "black",
             "row"   : 6,
+            "column" : 7
+        },
+    "16": {
+            "piece" : "rook",
+            "color": "white",
+            "row"   : 0,
+            "column" : 0
+        },
+    "17": {
+            "piece" : "rook",
+            "color": "white",
+            "row"   : 0,
+            "column" : 7
+        },
+    "18":  {
+            "piece" : "knight",
+            "color": "white",
+            "row"   : 0,
+            "column" : 1
+        },
+    "19":  {
+            "piece" : "knight",
+            "color": "white",
+            "row"   : 0,
+            "column" : 6
+        },
+    "20":  {
+            "piece" : "bishop",
+            "color": "white",
+            "row"   : 0,
+            "column" : 2
+        },
+    "21":  {
+            "piece" : "bishop",
+            "color": "white",
+            "row"   : 0,
+            "column" : 5
+        },
+    "22":  {
+            "piece" : "queen",
+            "color": "white",
+            "row"   : 0,
+            "column" : 3
+        },
+    "23":  {
+            "piece" : "king",
+            "color": "white",
+            "row"   : 0,
+            "column" : 4
+        },
+    "24":  {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 0
+        },
+    "25":  {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 1
+        },
+    "26": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 2
+        },
+    "27": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 3
+        },
+    "28": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 4
+        },
+    "29": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 5
+        },
+    "30": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
+            "column" : 6
+        },
+    "31": {
+            "piece" : "pawn",
+            "color": "white",
+            "row"   : 1,
             "column" : 7
         }
 }

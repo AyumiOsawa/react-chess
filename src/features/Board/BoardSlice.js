@@ -8,6 +8,7 @@ const createInitialBoard = (initialSelectedCell) => {
   const rowNum = constants.BOARD.size[1];
   const initialCellState = {
                              piece: null,
+                             color: null,
                              isOnPath: false
                            };
   const initialRowState   = Array.from({length: colNum}, () => ({...initialCellState}));
@@ -17,6 +18,7 @@ const createInitialBoard = (initialSelectedCell) => {
   const pieceLocations = Object.values(initialSetUp);
   pieceLocations.forEach(cell => {
     initialBoardState[cell.row][cell.column].piece = cell.piece;
+    initialBoardState[cell.row][cell.column].color = cell.color;
   })
   return initialBoardState;
 };
